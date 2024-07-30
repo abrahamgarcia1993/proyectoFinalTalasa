@@ -81,5 +81,5 @@ export {
   createNewContent,
   findContentById,
   updateContentById,
-  deleteContentById,
+  deleteContentById
 };
