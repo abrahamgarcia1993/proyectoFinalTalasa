@@ -28,4 +28,30 @@ async function getResultById(id){
         throw error
     }
 }
-export {createResult, getResultById}
+async function updateResult(id, user_id, exam_id, score, submission_date){
+    try {
+        const [result]= await pool.execute("UPDATE results SET user_id=?, exam_id=?, score=?, submission_date=NOW() WHERE id=?",[user_id, exam_id, score, submission_date, id])
+        if(result.affectedRows>0){
+            return true
+        }else{
+            return false
+        }
+    } catch (error) {
+        console.error(error)
+        throw error
+    }
+}
+async function deleteResult(id){
+    try {
+        const [result]= await pool.execute("DELETE FROM results WHERE id=?",[id])
+        if(result.affectedRows>0){
+            return true
+        }else{
+            return false
+        }
+    } catch (error) {
+        console.error(error)
+        throw error
+    }
+}
+export {createResult, getResultById, updateResult, deleteResult}

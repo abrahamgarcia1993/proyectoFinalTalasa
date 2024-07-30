@@ -32,4 +32,30 @@ async function getExamById(id){
         throw error
     }
 }
-export {createExam, getExamById}
+ async function updateExam(id, module_exam, questions){
+    try {
+        const [result]= await pool.execute("UPDATE exams SET module_exam=?, questions=?, update_at=NOW() WHERE id=?",[module_exam, questions, id])
+        if(result.affectedRows>0){
+            return true
+        }else{
+            return false
+        }
+    } catch (error) {
+        console.error(error)
+        throw error
+    }      
+} 
+async function deleteExam(id){
+    try {
+        const [result]= await pool.execute("DELETE FROM exams WHERE id=?",[id])
+        if(result.affectedRows>0){
+            return true
+        }else{
+            return false
+        }
+    } catch (error) {
+        console.error(error)
+        throw error
+    }
+}
+export {createExam, getExamById,updateExam, deleteExam}

@@ -12,7 +12,7 @@ async function createContent (title, description, content_url){
     }
 }
 
-async function getContenById(id){
+async function getContentById(id){
     try {
         const [results]= await pool.execute("SELECT * FROM contents WHERE id=?", [id])
         if(results.length<1){
@@ -56,4 +56,17 @@ async function deleteContent(id){
         throw error
     }
 }
-export{createContent, getContenById, updateContent, deleteContent}
+async function getAllContents(){
+    try {
+        const [results]= await pool.execute("SELECT * FROM contents")
+        if(results.length>0){
+            return results
+        }else{
+            return null
+        }
+    } catch (error) {
+        console.error(error)
+        throw error
+    }
+}
+export{createContent, getContentById, updateContent, deleteContent,getAllContents}

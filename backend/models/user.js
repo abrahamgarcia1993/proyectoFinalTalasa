@@ -50,17 +50,32 @@ async function getUserById(id){
         throw error
     }
 }
-async function getAllContents(){
+async function updateUser(id, first_name, last_name, email, password, role, profile_picture, cv){
     try {
-        const [results]= await pool.execute("SELECT * FROM contents")
-        if(results.length>0){
-            return results
+        const [result]= await pool.execute("UPDATE users SET first_name=?, last_name=?, email=?, password=?, role=?, profile_picture=?, cv=? WHERE id=?",[first_name, last_name, email, password, role, profile_picture, cv, id])
+        if(result.affectedRows>0){
+            return true
         }else{
-            return null
+            return false
         }
     } catch (error) {
         console.error(error)
         throw error
     }
 }
-export{createUser, getUserByEmail, getUserById, getAllContents};
+
+async function deleteUser(id){
+    try {
+        const [result]= await pool.execute("DELETE FROM users WHERE id=?", [id])
+        if(result.affectedRows>0){
+            return true
+        }else{
+            return false
+        }
+    } catch (error) {
+        console.error(error)
+        throw error
+    }
+}   
+
+export{createUser, getUserByEmail, getUserById, updateUser, deleteUser};
