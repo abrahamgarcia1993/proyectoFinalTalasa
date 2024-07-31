@@ -1,10 +1,10 @@
-import pool from "../database/db"
+import pool from "../database/db.js"
 
-async function createExam(module_exam, questions){
+async function createExam(module_number, questions){
 
     try {
-        const [result] = await pool.execute("INSERT INTO exams ( module_exam, questions, create_at, update_at) VALUES (?,?,NOW(),NOW())",
-            [module_exam, questions]
+        const [result] = await pool.execute("INSERT INTO exams ( module_number, questions, created_at, updated_at) VALUES (?,?,NOW(),NOW())",
+            [module_number, questions]
         )
 
         if(result.affectedRows>0){
@@ -32,9 +32,9 @@ async function getExamById(id){
         throw error
     }
 }
- async function updateExam(id, module_exam, questions){
+ async function updateExam(id, module_number, questions){
     try {
-        const [result]= await pool.execute("UPDATE exams SET module_exam=?, questions=?, update_at=NOW() WHERE id=?",[module_exam, questions, id])
+        const [result]= await pool.execute("UPDATE exams SET module_number=?, questions=?, updated_at=NOW() WHERE id=?",[module_number, questions, id])
         if(result.affectedRows>0){
             return true
         }else{

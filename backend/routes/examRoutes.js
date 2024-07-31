@@ -1,14 +1,14 @@
 import express from "express"
-import {createNewExam, findExamById, updateExamById, deleteExamById} from "../controllers/examController"
+import {createNewExam, findExamById, updateExamById, deleteExamById} from "../controllers/examController.js"
 
 const router= express.Router()
 
-router.post("/exam", createNewExam)
+router.post("/exams", createNewExam)
 
-router.get("/exam/:id", findExamById)
+router.get("/exams/:id", findExamById)
 
-router.put("/exam/:id", updateExamById)
+router.put("/exams/:id", updateExamById)
 
-router.delete("/exam/:id", deleteExamById)
+router.delete("/exams/:id", deleteExamById)
 
 export default router

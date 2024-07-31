@@ -1,4 +1,4 @@
-import { createExam, deleteExam, getExamById, updateExam } from "../models/exams"
+import { createExam, deleteExam, getExamById, updateExam } from "../models/exams.js"
 
 const createNewExam= async (req, res)=>{
     const {module_number, questions}= req.body
@@ -10,7 +10,7 @@ const createNewExam= async (req, res)=>{
         if(newExam){
             res.status(201).json({message:"El examen se ha creado correctamente"})
         }else{
-            res.status(400).json({message:"No se pudo crear el examen"})
+            res.status(404).json({message:"No se pudo crear el examen"})
             
         }
     } catch (error) {
@@ -23,7 +23,7 @@ const findExamById =async (req, res)=>{
     try {
         const findExam =await getExamById(id)
         if(findExam){
-            res.status(200).json({message:"El examen se ha encontrado correctamente"})
+            res.status(200).json({message:"El examen se ha encontrado correctamente",examId:findExam})
         }else{
             res.status(404).json ({message:"El examen no ha sido encontrado"})
         }

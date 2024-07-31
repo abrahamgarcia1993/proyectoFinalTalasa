@@ -2,10 +2,10 @@ import express from "express"
 import dotenv from "dotenv"
 import logger from "morgan"
 import cookieParser from "cookie-parser"
-import userRoutes from './routes/userRoutes';
-import contentRoutes from './routes/contentRoutes';
-import examRoutes from './routes/examRoutes';
-import resultRoutes from './routes/resultRoutes';
+import userRoutes from './routes/userRoutes.js';
+import contentRoutes from './routes/contentRoutes.js';
+import examRoutes from './routes/examRoutes.js';
+import resultRoutes from './routes/resultRoutes.js';
 
 dotenv.config()
 const app= express()
@@ -22,10 +22,10 @@ app.use(cookieParser())
 
 //middleware api
 
-app.use('/api', userRoutes);
-app.use('/api', contentRoutes);
-app.use('/api', examRoutes);
-app.use('/api', resultRoutes);
+app.use('/', userRoutes);
+app.use('/', contentRoutes);
+app.use('/', examRoutes);
+app.use('/', resultRoutes);
 
 // Ruta de prueba
 app.get('/', (req, res) => {

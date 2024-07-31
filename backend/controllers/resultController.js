@@ -1,14 +1,20 @@
-import { getResultById ,createResult,updateResult,deleteResult} from "../models/grade";
+import { getResultById ,createResult,updateResult,deleteResult} from "../models/grade.js";
 
 const createNewResult = async (req, res) => {
-    const { user_id, exam_id, score } = req.body;
+    const { user_id, exam_id, score, review_date, review_status, comments, attempt_number } = req.body;
 
     if (!user_id || !exam_id || typeof score !== 'number') {
-        return res.status(400).json({ message: "Todos los campos son requeridos y deben ser válidos" });
+        return res.status(400).json({ message: "Todos los campos obligatorios son requeridos y deben ser válidos" });
     }
 
+    // Asignar valores predeterminados si los opcionales no están definidos
+    const safeReviewDate = review_date || null;
+    const safeReviewStatus = review_status || 'pending';
+    const safeComments = comments || null;
+    const safeAttemptNumber = attempt_number || 1;
+
     try {
-        const newResult = await createResult(user_id, exam_id, score);
+        const newResult = await createResult(user_id, exam_id, score, safeReviewDate, safeReviewStatus, safeComments, safeAttemptNumber);
 
         if (newResult) {
             res.status(201).json({ message: "El resultado se ha creado correctamente", resultId: newResult });

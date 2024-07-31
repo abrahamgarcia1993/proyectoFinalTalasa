@@ -8,3 +8,4 @@ const pool = createPool({
   database: process.env.DB_NAME,
   port: process.env.DB_PORT,
 });
+export default pool

@@ -1,81 +1,84 @@
-import pool from "../database/db";
+import pool from "../database/db.js";
 import bcrypt from "bcrypt";
 
+const saltRounds = 10;
+
 async function hashPassword(password) {
-  try {
-    const hashedPassword = await bcrypt.hash(password, 10);
-    return hashedPassword;
-  } catch (error) {
-    console.error(error);
-  }
-}
-async function createUser (firs_name, last_name, email, password, role, profile_picture, cv) {
-  try {
-    const hashedPassword = await hashPassword(password);
-    const [result] = await pool.execute(
-      "INSERT INTO users (firs_name, last_name, email, password, role, profile_picture, cv) VALUES (?,?,?,?,?,?,?)",
-      [firs_name, last_name, email,hashedPassword, role, profile_picture, cv]
-    );
-    return result.insertId
-  } catch (error) {
-    console.error(error);
-    throw error
-  }
-}
-async function getUserByEmail(email){
     try {
-        const [result]= await pool.execute("SELECT * FROM users WHERE email=?", [email])
-        if(result.length<1){
-            return null
-        }else{
-            return result[0]
-        }
+        const salt = await bcrypt.genSalt(saltRounds);
+        const hashedPassword = await bcrypt.hash(password, salt);
+        return hashedPassword;
     } catch (error) {
-        console.error(error)
-        throw error
+        console.error('Error hashing password:', error);
+        throw error;
     }
 }
 
-async function getUserById(id){
-    try {
-        const [result]= await pool.execute("SELECT * FROM users where id=?", [id])
-
-        if(result.length<1){
-            return null
-        }else{
-            return result[0]
-        }
-    } catch (error) {
-        console.error(error)
-        throw error
+async function createUser(first_name, last_name, email, password, role, profile_picture, cv) {
+    if (!first_name || !last_name || !email || !password || !role) {
+        throw new Error('Missing required fields');
     }
-}
-async function updateUser(id, first_name, last_name, email, password, role, profile_picture, cv){
+
     try {
-        const [result]= await pool.execute("UPDATE users SET first_name=?, last_name=?, email=?, password=?, role=?, profile_picture=?, cv=? WHERE id=?",[first_name, last_name, email, password, role, profile_picture, cv, id])
-        if(result.affectedRows>0){
-            return true
-        }else{
-            return false
-        }
+        const hashedPassword = await hashPassword(password);
+        const [result] = await pool.execute(
+            "INSERT INTO users (first_name, last_name, email, password, role, profile_picture, cv, created_at, updated_at) VALUES (?,?,?,?,?,?,?,NOW(),NOW())",
+            [first_name, last_name, email, hashedPassword, role, profile_picture, cv]
+        );
+        return result.insertId;
     } catch (error) {
-        console.error(error)
-        throw error
+        console.error('Error creating user:', error);
+        throw error;
     }
 }
 
-async function deleteUser(id){
+async function getUserByEmail(email) {
     try {
-        const [result]= await pool.execute("DELETE FROM users WHERE id=?", [id])
-        if(result.affectedRows>0){
-            return true
-        }else{
-            return false
-        }
+        const [result] = await pool.execute("SELECT * FROM users WHERE email=?", [email]);
+        return result.length ? result[0] : null;
     } catch (error) {
-        console.error(error)
-        throw error
+        console.error('Error fetching user by email:', error);
+        throw error;
     }
-}   
+}
 
-export{createUser, getUserByEmail, getUserById, updateUser, deleteUser};
+async function getUserById(id) {
+    try {
+        const [result] = await pool.execute("SELECT * FROM users WHERE id=?", [id]);
+        return result.length ? result[0] : null;
+    } catch (error) {
+        console.error('Error fetching user by ID:', error);
+        throw error;
+    }
+}
+
+async function updateUser(id, first_name, last_name, email, password, role, profile_picture, cv) {
+    const params = [first_name, last_name, email, role, profile_picture, cv, id];
+    let query = "UPDATE users SET first_name=?, last_name=?, email=?, role=?, profile_picture=?, cv=? WHERE id=?";
+
+    if (password) {
+        const hashedPassword = await hashPassword(password);
+        query = "UPDATE users SET first_name=?, last_name=?, email=?, password=?, role=?, profile_picture=?, cv=? WHERE id=?";
+        params.splice(3, 0, hashedPassword); // Inserta la contraseña en el lugar correcto
+    }
+
+    try {
+        const [result] = await pool.execute(query, params);
+        return result.affectedRows > 0;
+    } catch (error) {
+        console.error('Error updating user:', error);
+        throw error;
+    }
+}
+
+async function deleteUser(id) {
+    try {
+        const [result] = await pool.execute("DELETE FROM users WHERE id=?", [id]);
+        return result.affectedRows > 0;
+    } catch (error) {
+        console.error('Error deleting user:', error);
+        throw error;
+    }
+}
+
+export { createUser, getUserByEmail, getUserById, updateUser, deleteUser };

@@ -2,12 +2,12 @@ import express from 'express'
 import {createNewContent, findContentById, updateContentById, deleteContentById} from '../controllers/contentController.js'
 const router=express.Router()
 
-router.post("/content", createNewContent)
+router.post("/contents", createNewContent)
 
-router.get("/content/:id", findContentById)
+router.get("/contents/:id", findContentById)
 
-router.put("/content/:id", updateContentById)
+router.put("/contents/:id", updateContentById)
 
-router.delete("/content/:id",deleteContentById);
+router.delete("/contents/:id",deleteContentById);
 
 export default router

@@ -3,7 +3,7 @@ import {
   deleteContent,
   getContentById,
   updateContent,
-} from "../models/content";
+} from "../models/content.js";
 
 const createNewContent = async (req, res) => {
   const { title, description, content_url } = req.body;
