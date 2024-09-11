@@ -1,49 +1,75 @@
-import express from "express"
-import dotenv from "dotenv"
-import logger from "morgan"
-import cookieParser from "cookie-parser"
-import userRoutes from './routes/userRoutes.js';
-import contentRoutes from './routes/contentRoutes.js';
-import examRoutes from './routes/examRoutes.js';
-import resultRoutes from './routes/resultRoutes.js';
-import courseRoutes from './routes/courseRoutes.js';
-import enrollmentRoutes from './routes/enrollmentRoutes.js';
-import purcharseRoutes from './routes/purcharseRoutes.js';
+require("dotenv").config();
+const express = require("express");
+const cors = require("cors");
+const bodyParser = require('body-parser');
+const app = express();
+const PORT = process.env.PORT || 3000;
+const authRoutes = require('./routes/authRoutes');
+const courseRoutes = require('./routes/courseRoutes');
+const moduleRoutes = require('./routes/moduleRoutes');
+const examRoutes = require('./routes/examRoutes');
+const purcharseRoutes = require('./routes/purcharseRoutes');
 
-dotenv.config()
-const app= express()
-const port=process.env.PORT||3001
+const path = require('path');
+const sequelize = require('./database/db');
+const User = require("./models/User");
+const Course = require("./models/Course");
+const Exam = require("./models/Exam");
+const { Files, filesHasManyCourses } = require("./models/Files");
+const Payment = require("./models/Payment");
+const Question = require("./models/Answer");
+
+const corsOptions = {
+  exposedHeaders: ['Content-Disposition'],
+};
+
+// Middleware
+app.use(express.json());
+app.use(cors(corsOptions));
+app.use(bodyParser.json()); // Para analizar cuerpos JSON
+app.use(bodyParser.urlencoded({ extended: true }));
+
+app.use('/uploads', express.static(path.join(__dirname, 'uploads')));
+
+// Routes
+app.use('/api/auth', authRoutes);
+app.use('/api/courses', courseRoutes); 
+app.use('/api/modules', moduleRoutes); // Asegúrate de que moduleRoutes esté definido
+app.use('/api/', examRoutes); // Asegúrate de que examRoutes esté definido
+app.use('/api', purcharseRoutes);
+app.get('/', (req, res) => {
+  res.send('API funcionando');
+});
 
 
+// Sincronizar modelos con la base de datos
+// sequelize.sync({ force: false })
+//   .then(() => {
+    
+//     console.log('Tablas sincronizadas');
+//   })
+//   .catch((err) => {
+//     console.error('Error al sincronizar las tablas:', err);
+//   });
 
-//middleware
-app.use(express.json())
-app.use(express.text())
-app.use(logger("dev"))
-app.use(express.urlencoded({extended:false}))
-app.use(cookieParser())
+async function syncModels() {
+  try {
+    await User.sync();
+    await Course.sync();
+    await Exam.sync();
+    await Files.sync();
+    await filesHasManyCourses.sync();
+    await Payment.sync();
+    await Question.sync();
+    console.log('Conexión establecida con la base de datos');
+  } catch (error) {
+    console.error('Error al conectar con la base de datos:', error);
+  }
+}
 
-//middleware api
+syncModels();
 
-app.use('/', userRoutes);
-app.use('/', contentRoutes);
-app.use('/', examRoutes);
-app.use('/', resultRoutes);
-app.use('/', courseRoutes);
-app.use('/', enrollmentRoutes);
-app.use('/', purcharseRoutes);
-
-// Ruta de prueba
-app.get('/', (_req, res) => {
-    res.send('Bienvenido a la API de la Academia Deportiva');
-  });
-  
-  // Manejo de errores 404
-  app.use((_req, res, _next) => {
-    res.status(404).json({ message: 'Recurso no encontrado' });
-  });
-  
-
-app.listen(port,()=>{
-    console.log(`servidor corriendo en el puerto:${port}`)
-})
+// Iniciar el servidor
+app.listen(PORT, () => {
+  console.log(`Servidor corriendo en el puerto: ${PORT}`);
+});

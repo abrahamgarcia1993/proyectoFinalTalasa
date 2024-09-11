@@ -1,3 +1,23 @@
+/* ./src/index.css */
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
+html{
+  scroll-behavior: smooth
+}
+body {
+    font-family: 'Roboto', sans-serif;
+    
+  }
+  @media (min-width: 780px) {
+    
+      header {
+        background-image:url("./assets/fotoPerfil.jpeg");
+        background-size: cover;
+        background-image:blur(200px);
+      }
+      nav{
+        font-size: 20px;
+        background: rgba(0, 0, 0, 0.65);
+      }
+  }

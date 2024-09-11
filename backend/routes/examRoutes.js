@@ -1,14 +1,24 @@
-import express from "express"
-import {createNewExam, findExamById, updateExamById, deleteExamById} from "../controllers/examController.js"
+// routes/examRoutes.js
+const express = require('express');
+const {
+  createExam,
+  getAllExams,
+  getExamById,
+  updateExam,
+  deleteExam,
+} = require('../controllers/examControllers');
+const authenticateToken = require('../middlewares/authMiddleware');
+const { saveAnswers } = require('../controllers/answerController');
 
-const router= express.Router()
+const router = express.Router();
 
-router.post("/exams", createNewExam)
+router.post('/exams', authenticateToken, createExam);
+router.get('/exams', authenticateToken, getAllExams);
+router.get('/exams/:id', authenticateToken, getExamById);
+router.put('/exams/:id', authenticateToken, updateExam);
+router.delete('/exams/:id', authenticateToken, deleteExam);
 
-router.get("/exams/:id", findExamById)
+// Ruta para guardar respuestas
+router.post('/answers', saveAnswers);
 
-router.put("/exams/:id", updateExamById)
-
-router.delete("/exams/:id", deleteExamById)
-
-export default router
+module.exports = router;

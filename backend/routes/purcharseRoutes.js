@@ -1,16 +1,11 @@
-import express from "express";
-import { createNewPurchase, getUserPurchases } from "../controllers/purcharseController.js";
-
+const express = require('express');
 const router = express.Router();
+const authenticateToken = require('../middlewares/authMiddleware'); // Asegurarse de que el usuario esté autenticado
+const { buyCourse, paymentGateway, confirmPayment } = require('../controllers/purchaseController'); // Controlador que manejaremos
 
+// Ruta para comprar un curso
+router.post('/purchase', authenticateToken, buyCourse);
+router.post('/create-payment-intent', authenticateToken, paymentGateway);
+router.post('/confirm-payment', confirmPayment);
 
-router.post("/", async (req, res) => {
-    await createNewPurchase(req, res);
-});
-
-
-router.get("/:userId", async (req, res) => {
-    await getUserPurchases(req, res);
-});
-
-export default router;
+module.exports = router;

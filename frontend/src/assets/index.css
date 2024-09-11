@@ -1,0 +1,209 @@
+/*variables*/
+ :root{
+    --color-primary:rgb(2, 179, 238);
+    --color-input:rgb(236, 246, 248);
+}
+
+*{
+    margin: 0;
+    padding: 0;
+    text-decoration: none;
+}
+
+header, main ,nav, .garantias{
+    max-width: 1200px;
+    margin:0 auto;
+}
+a{
+    color: black;
+}
+header{
+    display: flex;
+    flex-shrink: 0;
+    justify-content: space-between;
+    align-items: center;
+    padding: 40px;
+}
+
+input{
+    border-radius:12px;
+    background: #EDF4F7;
+    padding:16px 24px;
+    border:0;
+    flex-shrink: 0;
+}
+
+header input{
+    width: 60%;
+}
+
+header button{
+    background: #EDF4F7;
+    border:0;
+    border-radius:12px;
+    padding: 16px 24px;
+    color:black;
+    box-shadow: 2px 2px 4px 2px rgba(0, 0, 0, 0.1);
+    position:relative;
+}
+.bullet{
+    border-radius: 100%;
+    width: 16px;
+    height: 16px;
+    background-color: #00A6FB;
+    color:white;
+    padding:2px;
+    position: absolute;
+    top: -8px;
+    right: -8px;
+    font-size: 0.8rem;
+}
+nav{
+    display: flex;
+    justify-content: flex-start;
+    padding: 40px;
+    max-width: 1200px;
+}
+ul{
+    display: flex;
+    list-style: none;
+    gap:16px;
+}
+main{
+    padding: 80px 40px;
+    display: flex;
+    justify-content: space-between;
+
+}
+main input{
+    width: 100%;
+}
+.login{
+    width: 40%;
+    display:flex;
+    flex-direction: column;
+    gap: 16px;
+}
+.btn{
+    background-color: #00A6FB;
+    color: white;
+    border: 0;
+    border-radius: 16px;
+    padding: 16px 24px;
+}
+
+.btn-login{
+    width: 30%;
+}
+
+.register{
+    width: 40%;
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+    overflow: hidden;
+    border: 2px solid #00A6FB;
+    padding: 16px 24px;
+    border-radius: 16px;
+    padding: 40px;
+}
+.btn-register{
+    width: 100%;
+}
+
+.register input{
+    padding: 12px 5%;
+    width: 90%;
+}
+
+.register div{
+    display: flex;
+    justify-content: space-between;
+}
+.register div input{
+    width: 35%;
+}
+
+.garantias{
+    display: flex;
+    justify-content: space-between;
+    padding:40px 0 ;
+}
+.garantias div{
+
+    padding: 0 20px;
+}
+.garantias> div{
+    display: flex;
+}
+.separacion{
+    border-left: 2px solid #EDF4F7;
+}
+
+footer{
+    padding: 144px 40px;
+    background-color: #051923;
+    color: white;
+    display: flex;
+    justify-content: space-around;
+    align-items: center;
+}
+.footer-total{
+    width: 40%;
+}
+ .footer-nav{
+    display: flex;
+    flex-direction: column;
+ }
+ .footer_nav-enlace{
+    display: flex;
+    justify-content: space-between;
+    padding: 32px 16px;
+ }
+.enlaces{
+    list-style: none;
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+}
+.enlaces li a{
+    color: white;
+}
+.footer-nav>img{
+    
+    width: 200px;
+    padding:0 16px;
+}
+
+.form-social{
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+}
+
+.form-social>p{
+    width: 60%;
+    font-size: 20px;
+}
+.form-social .social-email{
+    border-radius:12px 0 0 12px;
+    width: 56%;
+}
+.form-social button{
+    border-radius: 0 12px 12px 0;
+    width: 30%;
+}
+.politica-radio{
+    display: flex;
+    gap: 8px;
+    margin-top: 12px;
+}
+
+.politica-radio p a{
+    color:#00A6FB;
+}
+.social-media{
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
